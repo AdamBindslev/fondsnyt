@@ -51,7 +51,7 @@ export default function LoginPage() {
             FONDSNYT // OVERBLIK
           </h1>
           <p className="text-xs text-slate-500">
-            Lukket dashboard for fondsovervågning og fundraising
+            Lukket dashboard for fondsovervågning og fristvarsling
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
               Adgangsbegrænset
             </h4>
             <p className="text-[11px] text-slate-500 leading-relaxed">
-              Indtast kontorets fælles adgangskode for at få adgang til puljer, deadlines og pipeline.
+              Indtast kontorets fælles adgangskode for at få adgang til puljer, deadlines og fondsovervågning.
             </p>
           </div>
         </div>

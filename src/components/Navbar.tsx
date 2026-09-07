@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Search, 
-  KanbanSquare, 
   Radio, 
   LogOut,
   Lock
@@ -39,7 +38,6 @@ export function Navbar() {
   const navItems = [
     { href: '/', label: 'Oversigt', icon: LayoutDashboard },
     { href: '/puljer', label: 'Fonde & Puljer', icon: Search },
-    { href: '/pipeline', label: 'Min Pipeline', icon: KanbanSquare },
     { href: '/overvaagning', label: 'Kildeovervågning', icon: Radio },
   ];
 

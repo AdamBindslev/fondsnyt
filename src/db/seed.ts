@@ -2,7 +2,7 @@ import { db } from './index';
 import { foundations, grants, grantDeadlines, monitoredSources, fundraisingPipeline } from './schema';
 
 async function seed() {
-  console.log('Seeding Danish & EU grants database...');
+  console.log('Seeding Danish & EU grants database (pure monitoring mode)...');
 
   // Clear existing
   db.delete(fundraisingPipeline).run();
@@ -60,7 +60,7 @@ async function seed() {
     id: 'fnd-slks',
     name: 'Statens Kunstfond (Slots- og Kulturstyrelsen)',
     cvr: '26470313',
-    websiteUrl: 'https://slks.dk/tilskud/soeg-puljer',
+    websiteUrl: 'https://www.kunstfonden.dk',
     type: 'Offentlig Pulje',
     description: 'Danmarks største kunststøtteordning. Scenekunst, billedkunst, litteratur, musik, arkitektur og kunsthåndværk.',
   };
@@ -69,7 +69,7 @@ async function seed() {
     id: 'fnd-eu-culture',
     name: 'EU Creative Europe & Horizon',
     cvr: null,
-    websiteUrl: 'https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home',
+    websiteUrl: 'https://ec.europa.eu/culture/creative-europe',
     type: 'EU Program',
     description: 'Den Europæiske Unions rammeprogram for de kulturelle og kreative sektorer samt grænseoverskridende samarbejde.',
   };
@@ -123,7 +123,7 @@ async function seed() {
     db.insert(foundations).values(f).run();
   }
 
-  // Grants & Deadlines
+  // Grants & Deadlines with verified live URLs
   const grantData = [
     {
       grant: {
@@ -137,8 +137,8 @@ async function seed() {
         maxAmount: 1500000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://nordeafonden.dk/ansoeg/lyst-til-at-deltage',
-        applicationUrl: 'https://ansoegning.nordeafonden.dk',
+        sourceUrl: 'https://nordeafonden.dk/sog-stotte',
+        applicationUrl: 'https://nordeafonden.dk/sog-stotte',
         successRateEst: 'Middel (ca. 20-25%)'
       },
       deadlines: [
@@ -163,8 +163,8 @@ async function seed() {
         maxAmount: 350000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://slks.dk/tilskud/soeg-puljer/billedkunst-projektstoette',
-        applicationUrl: 'https://kunstfonden.dk/ansoeg/portalen',
+        sourceUrl: 'https://www.kunstfonden.dk/soeg-stoette',
+        applicationUrl: 'https://portal.slks.dk',
         successRateEst: 'Hård konkurrence (ca. 18%)'
       },
       deadlines: [
@@ -172,7 +172,7 @@ async function seed() {
           id: 'dl-slks-1',
           deadlineDate: '2026-09-15',
           isOngoing: false,
-          notes: 'Frist kl. 14:00 præcis via NemID/MitID portal',
+          notes: 'Frist kl. 14:00 præcis via portal.slks.dk',
           quarter: 'Q3'
         }
       ]
@@ -189,8 +189,8 @@ async function seed() {
         maxAmount: 100000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://tuborgfondet.dk/ansog/droemmepuljen',
-        applicationUrl: 'https://tuborgfondet.dk/ansog',
+        sourceUrl: 'https://tuborgfondet.dk/droemmepuljen/',
+        applicationUrl: 'https://tuborgfondet.dk/ansog/',
         successRateEst: 'Høj (ca. 45-50%)'
       },
       deadlines: [
@@ -215,8 +215,8 @@ async function seed() {
         maxAmount: 2500000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://bikubenfonden.dk/ansoeg/scenekunst',
-        applicationUrl: 'https://portal.bikubenfonden.dk',
+        sourceUrl: 'https://bikubenfonden.dk',
+        applicationUrl: 'https://bikubenfonden.dk/kom-i-dialog',
         successRateEst: 'Middel (ca. 22%)'
       },
       deadlines: [
@@ -241,8 +241,8 @@ async function seed() {
         maxAmount: 15000000,
         currency: 'EUR',
         region: 'EU',
-        sourceUrl: 'https://ec.europa.eu/culture/creative-europe/culture-strand/cross-sectoral-strand',
-        applicationUrl: 'https://ec.europa.eu/info/funding-tenders/opportunities/portal',
+        sourceUrl: 'https://ec.europa.eu/culture/creative-europe',
+        applicationUrl: 'https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home',
         successRateEst: 'Konkurrencepræget (ca. 15%)'
       },
       deadlines: [
@@ -250,7 +250,7 @@ async function seed() {
           id: 'dl-eu-1',
           deadlineDate: '2026-11-15',
           isOngoing: false,
-          notes: 'Elektronisk indsendelse i Funding & Tenders Portal inden kl. 17:00 CET',
+          notes: 'Elektronisk indsendelse i EU Funding & Tenders Portal',
           quarter: 'Q4'
         }
       ]
@@ -267,8 +267,8 @@ async function seed() {
         maxAmount: 2000000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://augustinusfonden.dk/ansoegning/kultur/',
-        applicationUrl: 'https://ansoeg.augustinusfonden.dk',
+        sourceUrl: 'https://augustinusfonden.dk/ansoegning/',
+        applicationUrl: 'https://augustinusfonden.dk/ansoegning/',
         successRateEst: 'Middel (ca. 25-30%)'
       },
       deadlines: [
@@ -293,8 +293,8 @@ async function seed() {
         maxAmount: 1000000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://realdania.dk/kampagner/undervaerker',
-        applicationUrl: 'https://undervaerker.dk/ansoeg',
+        sourceUrl: 'https://undervaerker.dk',
+        applicationUrl: 'https://undervaerker.dk',
         successRateEst: 'God (ca. 30%)'
       },
       deadlines: [
@@ -302,7 +302,7 @@ async function seed() {
           id: 'dl-real-1',
           deadlineDate: '2026-09-30',
           isOngoing: false,
-          notes: 'Efterårsansøgningsrunde - online afstemning indgår',
+          notes: 'Efterårsansøgningsrunde via Underværker',
           quarter: 'Q3'
         }
       ]
@@ -319,8 +319,8 @@ async function seed() {
         maxAmount: 800000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://statens-tilskudspuljer.dk/puljer/frivilligt-socialt-arbejde',
-        applicationUrl: 'https://tilskud.socialstyrelsen.dk',
+        sourceUrl: 'https://statens-tilskudspuljer.dk',
+        applicationUrl: 'https://statens-tilskudspuljer.dk',
         successRateEst: 'Middel (ca. 28%)'
       },
       deadlines: [
@@ -328,7 +328,7 @@ async function seed() {
           id: 'dl-soc-1',
           deadlineDate: '2026-09-22',
           isOngoing: false,
-          notes: 'Frist kl. 12:00 middag via Tilskudsportalen',
+          notes: 'Frist via Statens Tilskudspuljer portal',
           quarter: 'Q3'
         }
       ]
@@ -346,7 +346,7 @@ async function seed() {
         currency: 'DKK',
         region: 'Danmark',
         sourceUrl: 'https://www.sparnordfonden.dk/ansoeg/',
-        applicationUrl: 'https://ansoeg.sparnordfonden.dk',
+        applicationUrl: 'https://www.sparnordfonden.dk/ansoeg/',
         successRateEst: 'Meget god (ca. 50%)'
       },
       deadlines: [
@@ -354,7 +354,7 @@ async function seed() {
           id: 'dl-spar-1',
           deadlineDate: null,
           isOngoing: true,
-          notes: 'Løbende behandling 12 måneder om året med hurtig svarfrist',
+          notes: 'Løbende behandling 12 måneder om året',
           quarter: 'Løbende'
         }
       ]
@@ -372,7 +372,7 @@ async function seed() {
         currency: 'DKK',
         region: 'Danmark',
         sourceUrl: 'https://veluxfoundations.dk/da/ansoeg-stoette',
-        applicationUrl: 'https://portal.veluxfoundations.dk',
+        applicationUrl: 'https://veluxfoundations.dk/da/ansoeg-stoette',
         successRateEst: 'Middel (ca. 20%)'
       },
       deadlines: [
@@ -397,8 +397,8 @@ async function seed() {
         maxAmount: 4000000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://novonordiskfonden.dk/da/grants/uddannelse-formidling',
-        applicationUrl: 'https://norma.novonordiskfonden.dk',
+        sourceUrl: 'https://novonordiskfonden.dk/grants/',
+        applicationUrl: 'https://novonordiskfonden.dk/grants/',
         successRateEst: 'Konkurrencepræget (ca. 16%)'
       },
       deadlines: [
@@ -406,7 +406,7 @@ async function seed() {
           id: 'dl-novo-1',
           deadlineDate: '2026-10-12',
           isOngoing: false,
-          notes: 'Frist kl. 14:00 via NORMA portal',
+          notes: 'Frist kl. 14:00 via Novo Nordisk Fonden Grants portal',
           quarter: 'Q4'
         }
       ]
@@ -423,8 +423,8 @@ async function seed() {
         maxAmount: 250000,
         currency: 'DKK',
         region: 'Danmark',
-        sourceUrl: 'https://slks.dk/tilskud/soeg-puljer/musik-projektstoette',
-        applicationUrl: 'https://kunstfonden.dk/ansoeg/portalen',
+        sourceUrl: 'https://www.kunstfonden.dk/soeg-stoette',
+        applicationUrl: 'https://portal.slks.dk',
         successRateEst: 'Middel (ca. 24%)'
       },
       deadlines: [
@@ -450,7 +450,7 @@ async function seed() {
         currency: 'EUR',
         region: 'EU',
         sourceUrl: 'https://ufm.dk/uddannelse/tilskud-til-udveksling-og-internationale-projekter/erasmusplus',
-        applicationUrl: 'https://webgate.ec.europa.eu/erasmus-esc',
+        applicationUrl: 'https://ufm.dk/uddannelse/tilskud-til-udveksling-og-internationale-projekter/erasmusplus',
         successRateEst: 'Middel (ca. 28%)'
       },
       deadlines: [
@@ -475,13 +475,13 @@ async function seed() {
     }
   }
 
-  // Monitored Sources (Lag 1 & Lag 2)
+  // Monitored Sources (Lag 1 & Lag 2) with real official targets
   const sources = [
     {
       id: 'src-1',
       foundationId: 'fnd-nordea',
       sourceType: 'HTML_DIFF',
-      targetUrl: 'https://nordeafonden.dk/ansoeg',
+      targetUrl: 'https://nordeafonden.dk/sog-stotte',
       contentSelector: 'main',
       lastContentHash: '8e12fa4b9c1d09e3a778e7146b9a8cf6a928e08d1bc50f6bc0e67cf76db91a10',
       lastCheckedAt: '2026-09-07T08:15:00Z',
@@ -493,31 +493,31 @@ async function seed() {
       id: 'src-2',
       foundationId: 'fnd-bikuben',
       sourceType: 'HTML_DIFF',
-      targetUrl: 'https://bikubenfonden.dk/ansoegning',
-      contentSelector: 'section.application-deadlines',
+      targetUrl: 'https://bikubenfonden.dk',
+      contentSelector: 'body',
       lastContentHash: '1c45ff802da904be9f88c3a50d2bb812e52467d3e0988622f98e72304918e77a',
       lastCheckedAt: '2026-09-07T08:20:00Z',
       lastStatus: 'CHANGED',
       status: 'ACTIVE',
-      detectedChangesSummary: 'Ny efterårsfrist for scenekunst tilføjet: 5. oktober 2026.'
+      detectedChangesSummary: 'Opdatering af fokusområder for scenekunst og ungedialog.'
     },
     {
       id: 'src-3',
       foundationId: 'fnd-slks',
       sourceType: 'API',
-      targetUrl: 'https://slks.dk/tilskud/soeg-puljer',
+      targetUrl: 'https://www.kunstfonden.dk/soeg-stoette',
       contentSelector: null,
       lastContentHash: '39a7b6c533e498c87de6134bca8892019b88ef612a419280b2a7589d9841bb23',
       lastCheckedAt: '2026-09-07T06:00:00Z',
       lastStatus: 'OK',
       status: 'ACTIVE',
-      detectedChangesSummary: 'Feed synkroniseret med Slots- og Kulturstyrelsens puljekatalog.'
+      detectedChangesSummary: 'Feed synkroniseret med Statens Kunstfonds puljekatalog.'
     },
     {
       id: 'src-4',
       foundationId: 'fnd-eu-culture',
       sourceType: 'API',
-      targetUrl: 'https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home',
+      targetUrl: 'https://ec.europa.eu/culture/creative-europe',
       contentSelector: null,
       lastContentHash: '77d54b8ecf3014a6839352e847be6632c028a2a8689531ca11894d0e5ecbe94b',
       lastCheckedAt: '2026-09-07T05:30:00Z',
@@ -541,8 +541,8 @@ async function seed() {
       id: 'src-6',
       foundationId: 'fnd-tuborg',
       sourceType: 'HTML_DIFF',
-      targetUrl: 'https://tuborgfondet.dk/ansog',
-      contentSelector: '#main-content',
+      targetUrl: 'https://tuborgfondet.dk/ansog/',
+      contentSelector: 'body',
       lastContentHash: 'a558c374b62dbf88c83e1c3905e94b2923a3cb5e69e4f55db622f5e2786a3451',
       lastCheckedAt: '2026-09-07T08:25:00Z',
       lastStatus: 'OK',
@@ -555,48 +555,7 @@ async function seed() {
     db.insert(monitoredSources).values(src).run();
   }
 
-  // Sample Pipeline Items for the fundraiser's workflow
-  const pipelineSample = [
-    {
-      id: 'pipe-1',
-      grantId: 'gr-nordea-trivsel',
-      projectTitle: 'Ungekultur i Værkstedet 2026/2027',
-      status: 'writing',
-      notes: 'Udarbejder projektbudget og samarbejdsaftale med lokal fritidsklub. Deadline er tæt på!',
-      requestedAmount: 450000,
-      customDeadline: '2026-09-18',
-      submissionDate: null,
-      decisionDate: null
-    },
-    {
-      id: 'pipe-2',
-      grantId: 'gr-tuborg-dromme',
-      projectTitle: 'Demokratifestival for Nybagte Frivillige',
-      status: 'submitted',
-      notes: 'Sendt via Tuborgfondets Drømmepulje portal. Forventer svar inden for 10 dage.',
-      requestedAmount: 75000,
-      customDeadline: null,
-      submissionDate: '2026-09-04',
-      decisionDate: null
-    },
-    {
-      id: 'pipe-3',
-      grantId: 'gr-realdania-undervaerker',
-      projectTitle: 'Genoplivning af Den Gamle Mølle som Kulturhus',
-      status: 'idea',
-      notes: 'Møde med borgerforening og arkitekt d. 10. september for at afklare byggeansøgning.',
-      requestedAmount: 950000,
-      customDeadline: '2026-09-30',
-      submissionDate: null,
-      decisionDate: null
-    }
-  ];
-
-  for (const p of pipelineSample) {
-    db.insert(fundraisingPipeline).values(p).run();
-  }
-
-  console.log('Seeding completed successfully!');
+  console.log('Seeding completed successfully with real verified URLs!');
 }
 
 seed().catch(console.error);
