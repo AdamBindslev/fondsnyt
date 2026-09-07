@@ -4,16 +4,36 @@ import * as schema from './schema';
 import path from 'path';
 import fs from 'fs';
 
-const dbDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+let dbPath = path.join(process.cwd(), 'data', 'fondsnyt.db');
+
+// Handle Vercel serverless environment (where root is read-only)
+if (process.env.VERCEL) {
+  const tmpPath = path.join('/tmp', 'fondsnyt.db');
+  try {
+    if (!fs.existsSync(tmpPath)) {
+      if (fs.existsSync(dbPath)) {
+        fs.copyFileSync(dbPath, tmpPath);
+      }
+    }
+    dbPath = tmpPath;
+  } catch (e) {
+    console.warn('Fallback to memory/temp db:', e);
+  }
+} else {
+  const dbDir = path.join(process.cwd(), 'data');
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
 }
 
-const dbPath = path.join(dbDir, 'fondsnyt.db');
 const sqlite = new Database(dbPath);
 
-// Enable WAL mode for high concurrency and performance
-sqlite.pragma('journal_mode = WAL');
+// Enable WAL mode for high concurrency
+try {
+  sqlite.pragma('journal_mode = WAL');
+} catch (e) {
+  // Ignored if unsupported
+}
 
 export const db = drizzle(sqlite, { schema });
 
