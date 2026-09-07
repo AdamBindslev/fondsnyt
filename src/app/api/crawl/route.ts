@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { db } from '@/db';
-import { monitoredSources, foundations } from '@/db/schema';
+import { monitoredSources, foundations, grants, grantDeadlines } from '@/db/schema';
 import { checkSourceForChanges } from '@/lib/scraper/diff-detector';
 import { eq } from 'drizzle-orm';
 
@@ -67,13 +67,21 @@ export async function POST(request: NextRequest) {
 
   try {
     const sources = db.select().from(monitoredSources).all();
+    const allFoundations = db.select().from(foundations).all();
+    const foundMap = new Map(allFoundations.map(f => [f.id, f]));
+    const allGrants = db.select().from(grants).all();
     const results = [];
 
     for (const src of sources) {
+      const foundation = foundMap.get(src.foundationId);
+      const foundationName = foundation?.name || 'Ukendt fond';
+
       const diff = await checkSourceForChanges(
         src.id,
         src.targetUrl,
-        src.lastContentHash
+        src.lastContentHash,
+        undefined,
+        foundationName
       );
 
       const status = diff.hasChanged ? 'CHANGED' : 'OK';
@@ -87,12 +95,50 @@ export async function POST(request: NextRequest) {
         .where(eq(monitoredSources.id, src.id))
         .run();
 
+      // If changes and deadlines were extracted by Gemini, sync to grant deadlines
+      let syncedDeadlinesCount = 0;
+      if (diff.hasChanged && diff.extractedInfo) {
+        const foundationGrants = allGrants.filter(g => g.foundationId === src.foundationId);
+        for (const fGrant of foundationGrants) {
+          const existingDeadlines = db.select().from(grantDeadlines).where(eq(grantDeadlines.grantId, fGrant.id)).all();
+
+          if (diff.extractedInfo.isOngoing) {
+            if (!existingDeadlines.some(d => d.isOngoing)) {
+              db.insert(grantDeadlines).values({
+                id: `dl-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                grantId: fGrant.id,
+                isOngoing: true,
+                notes: 'Løbende frist opdateret via AI overvågning',
+                deadlineDate: null
+              }).run();
+              syncedDeadlinesCount++;
+            }
+          } else if (diff.extractedInfo.deadlines.length > 0) {
+            for (const newDate of diff.extractedInfo.deadlines) {
+              const alreadyExists = existingDeadlines.some(d => d.deadlineDate === newDate);
+              if (!alreadyExists) {
+                db.insert(grantDeadlines).values({
+                  id: `dl-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                  grantId: fGrant.id,
+                  deadlineDate: newDate,
+                  isOngoing: false,
+                  notes: 'Ny frist udregnet af Gemini fra fondens hjemmeside'
+                }).run();
+                syncedDeadlinesCount++;
+              }
+            }
+          }
+        }
+      }
+
       results.push({
         sourceId: src.id,
         url: src.targetUrl,
         status,
         summary: diff.summary,
-        checkedAt: diff.checkedAt
+        checkedAt: diff.checkedAt,
+        extractedDeadlines: diff.extractedDeadlines || [],
+        syncedDeadlinesCount
       });
     }
 

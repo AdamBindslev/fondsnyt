@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { extractGrantInfoWithGemini, type ExtractedGrantData } from './gemini-extractor';
 
 export interface DiffResult {
   url: string;
@@ -9,6 +10,7 @@ export interface DiffResult {
   checkedAt: string;
   summary: string;
   extractedDeadlines?: string[];
+  extractedInfo?: ExtractedGrantData;
 }
 
 /**
@@ -32,13 +34,14 @@ export function calculateContentHash(normalizedText: string): string {
 }
 
 /**
- * Totrins scraping & diff-detection workflow
+ * Totrins scraping & diff-detection workflow med AI ekstraktion
  */
 export async function checkSourceForChanges(
   sourceId: string,
   url: string,
   previousHash: string | null,
-  simulatedNewContent?: string
+  simulatedNewContent?: string,
+  foundationName?: string
 ): Promise<DiffResult> {
   const checkedAt = new Date().toISOString();
 
@@ -86,6 +89,18 @@ export async function checkSourceForChanges(
 
   const hasChanged = previousHash !== null && previousHash !== newHash;
 
+  let summary = 'Ingen ændringer fundet. Indholdet matcher forrige kørsel (0 LLM tokens forbrugt).';
+  let extractedInfo: ExtractedGrantData | undefined;
+
+  if (hasChanged) {
+    extractedInfo = await extractGrantInfoWithGemini(
+      foundationName || 'Fond',
+      url,
+      normalized
+    );
+    summary = extractedInfo.summary;
+  }
+
   return {
     url,
     sourceId,
@@ -93,8 +108,8 @@ export async function checkSourceForChanges(
     newHash,
     hasChanged,
     checkedAt,
-    summary: hasChanged
-      ? 'Ny ændring detekteret på fondens ansøgningsside! Tidsfrister eller ansøgningsvilkår er opdateret.'
-      : 'Ingen ændringer fundet. Indholdet matcher forrige kørsel (0 LLM tokens forbrugt).'
+    summary,
+    extractedDeadlines: extractedInfo?.deadlines,
+    extractedInfo
   };
 }

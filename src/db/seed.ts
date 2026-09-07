@@ -287,10 +287,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-nordea-1',
-          deadlineDate: '2026-09-18',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårsrunde - hurtig tilbagemelding ultimo oktober',
-          quarter: 'Q3'
+          notes: 'Se ansøgningsfrister på fondens portal',
+          quarter: null
         }
       ]
     },
@@ -314,10 +314,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-slks-1',
-          deadlineDate: '2026-09-15',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist kl. 14:00 præcis via digital portal (portal.slks.dk)',
-          quarter: 'Q3'
+          notes: 'Se puljefrister på Kunstfondens portal (portal.slks.dk)',
+          quarter: null
         }
       ]
     },
@@ -368,10 +368,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-bikuben-1',
-          deadlineDate: '2026-10-05',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Behandles på bestyrelsesmøde i november',
-          quarter: 'Q4'
+          notes: 'Se ansøgningsfrister på Bikubenfondens portal',
+          quarter: null
         }
       ]
     },
@@ -395,10 +395,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-eu-1',
-          deadlineDate: '2026-11-15',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Elektronisk indsendelse i EU Funding & Tenders Portal',
-          quarter: 'Q4'
+          notes: 'Se åbne calls på EU Funding & Tenders Portal',
+          quarter: null
         }
       ]
     },
@@ -422,10 +422,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-aug-1',
-          deadlineDate: '2026-10-10',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist til efterårets uddelingsmøde',
-          quarter: 'Q4'
+          notes: 'Se mødefrister på Augustinus Fondens portal',
+          quarter: null
         }
       ]
     },
@@ -449,10 +449,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-real-1',
-          deadlineDate: '2026-09-30',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårsansøgningsrunde via Underværker portal',
-          quarter: 'Q3'
+          notes: 'Se runder på Underværker portalen',
+          quarter: null
         }
       ]
     },
@@ -476,10 +476,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-soc-1',
-          deadlineDate: '2026-09-22',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist via Statens Tilskudspuljer portal',
-          quarter: 'Q3'
+          notes: 'Se aktuelle frister på Statens Tilskudspuljer',
+          quarter: null
         }
       ]
     },
@@ -530,10 +530,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-velux-1',
-          deadlineDate: '2026-10-20',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Trin 1 skitseansøgning via ansøgningsportal',
-          quarter: 'Q4'
+          notes: 'Se frister og proces på VELUX FONDENs portal',
+          quarter: null
         }
       ]
     },
@@ -557,10 +557,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-novo-1',
-          deadlineDate: '2026-10-12',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist kl. 14:00 via NORMA Grants portal',
-          quarter: 'Q4'
+          notes: 'Se åbne opslag på NORMA Grants portal',
+          quarter: null
         }
       ]
     },
@@ -584,10 +584,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-slks-2',
-          deadlineDate: '2026-10-01',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist kl. 14:00 via portal.slks.dk',
-          quarter: 'Q4'
+          notes: 'Se musikpuljefrister på portal.slks.dk',
+          quarter: null
         }
       ]
     },
@@ -611,10 +611,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-eu-2',
-          deadlineDate: '2026-10-04',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Elektronisk indsendelse kl. 12:00 CET',
-          quarter: 'Q4'
+          notes: 'Se frister på Erasmus+ / EU portal',
+          quarter: null
         }
       ]
     },
@@ -638,10 +638,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-nycarlsberg-1',
-          deadlineDate: '2026-10-01',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårets ansøgningsrunde',
-          quarter: 'Q4'
+          notes: 'Se ansøgningsfrister på Ny Carlsbergfondets portal',
+          quarter: null
         }
       ]
     },
@@ -665,10 +665,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-tryg-1',
-          deadlineDate: '2026-10-01',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårsansøgningsfrist for regionale råd',
-          quarter: 'Q4'
+          notes: 'Se frister for regionale råd på TrygFondens portal',
+          quarter: null
         }
       ]
     },
@@ -746,10 +746,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-obel-1',
-          deadlineDate: '2026-10-15',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårsrunde - frist kl. 23:59',
-          quarter: 'Q4'
+          notes: 'Se ansøgningsrunder på Det Obelske Familiefonds portal',
+          quarter: null
         }
       ]
     },
@@ -773,10 +773,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-loa-1',
-          deadlineDate: '2026-10-01',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårsbehandling i LOA bestyrelsen',
-          quarter: 'Q4'
+          notes: 'Se møder og frister på LOA-fondens portal',
+          quarter: null
         }
       ]
     },
@@ -800,10 +800,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-friluft-1',
-          deadlineDate: '2026-09-25',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist for efterårets puljeuddeling',
-          quarter: 'Q3'
+          notes: 'Se uddelingsfrister på Friluftsrådets portal',
+          quarter: null
         }
       ]
     },
@@ -854,10 +854,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-egmont-1',
-          deadlineDate: '2026-10-15',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Efterårets dialogrunde og skitseindsendelse',
-          quarter: 'Q4'
+          notes: 'Se proces og frister på Egmont Fondens portal',
+          quarter: null
         }
       ]
     },
@@ -881,10 +881,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-carlsberg-1',
-          deadlineDate: '2026-10-01',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Årlig efterårsansøgningsrunde kl. 16:00',
-          quarter: 'Q4'
+          notes: 'Se opslag og frister på Carlsbergfondets portal',
+          quarter: null
         }
       ]
     },
@@ -908,10 +908,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-khf-1',
-          deadlineDate: '2026-09-28',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist til bestyrelsesmøde i oktober',
-          quarter: 'Q3'
+          notes: 'Se bestyrelsesmøder på Knud Højgaards Fonds portal',
+          quarter: null
         }
       ]
     },
@@ -962,10 +962,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-demant-1',
-          deadlineDate: '2026-10-08',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist til efterårets bevillingsmøde',
-          quarter: 'Q4'
+          notes: 'Se bevillingsmøder på William Demant Fondens portal',
+          quarter: null
         }
       ]
     },
@@ -989,10 +989,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-louis-1',
-          deadlineDate: '2026-09-20',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist til efterårets uddeling',
-          quarter: 'Q3'
+          notes: 'Se uddelingsfrister på Louis-Hansen Fondens portal',
+          quarter: null
         }
       ]
     },
@@ -1016,10 +1016,10 @@ async function seed() {
       deadlines: [
         {
           id: 'dl-beckett-1',
-          deadlineDate: '2026-09-15',
+          deadlineDate: null,
           isOngoing: false,
-          notes: 'Frist for efterårsansøgninger',
-          quarter: 'Q3'
+          notes: 'Se ansøgningsfrister på Beckett-Fondens portal',
+          quarter: null
         }
       ]
     },

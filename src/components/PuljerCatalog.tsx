@@ -114,13 +114,21 @@ export function PuljerCatalog({ initialGrants }: PuljerCatalogProps) {
       }
 
       // Sort by deadline
-      const dateA = a.deadlines?.[0]?.deadlineDate;
-      const dateB = b.deadlines?.[0]?.deadlineDate;
-      if (a.deadlines?.[0]?.isOngoing) return 1;
-      if (b.deadlines?.[0]?.isOngoing) return -1;
-      if (!dateA) return 1;
-      if (!dateB) return -1;
-      return new Date(dateA).getTime() - new Date(dateB).getTime();
+      const dlA = a.deadlines?.[0];
+      const dlB = b.deadlines?.[0];
+      const dateA = dlA?.deadlineDate;
+      const dateB = dlB?.deadlineDate;
+
+      // Real verified deadlines first
+      if (dateA && !dateB) return -1;
+      if (!dateA && dateB) return 1;
+      if (dateA && dateB) return new Date(dateA).getTime() - new Date(dateB).getTime();
+
+      // Next, ongoing grants
+      if (dlA?.isOngoing && !dlB?.isOngoing) return -1;
+      if (!dlA?.isOngoing && dlB?.isOngoing) return 1;
+
+      return a.title.localeCompare(b.title, 'da');
     });
   }, [initialGrants, search, selectedCategory, selectedRegion, deadlineFilter, sortBy]);
 

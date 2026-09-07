@@ -12,7 +12,8 @@ import {
   Cpu, 
   Database,
   Hash,
-  Loader2
+  Loader2,
+  Sparkles
 } from 'lucide-react';
 
 interface MonitoredSourceItem {
@@ -249,9 +250,10 @@ export function MonitoringView() {
                           {isChanged ? 'Ændring opdaget' : 'Uændret (OK)'}
                         </span>
                         {src.detectedChangesSummary && (
-                          <p className="text-[11px] text-slate-600 max-w-sm leading-tight">
-                            {src.detectedChangesSummary}
-                          </p>
+                          <div className="flex items-start gap-1.5 text-[11px] text-slate-700 max-w-sm leading-tight bg-slate-50/80 p-1.5 rounded border border-slate-200/70">
+                            {isChanged && <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />}
+                            <span>{src.detectedChangesSummary}</span>
+                          </div>
                         )}
                       </div>
                     </td>

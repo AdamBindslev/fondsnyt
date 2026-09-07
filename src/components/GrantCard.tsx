@@ -98,6 +98,7 @@ export function GrantCard({ grant }: GrantCardProps) {
           <DeadlineBadge
             deadlineDate={primaryDeadline.deadlineDate}
             isOngoing={primaryDeadline.isOngoing}
+            notes={primaryDeadline.notes}
             compact
           />
         </div>

@@ -9,11 +9,20 @@ interface DeadlineBadgeProps {
 }
 
 export function DeadlineBadge({ deadlineDate, isOngoing, notes, compact = false }: DeadlineBadgeProps) {
-  if (isOngoing || !deadlineDate) {
+  if (isOngoing) {
     return (
-      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold badge-ongoing`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold badge-ongoing">
+        <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
         Løbende frist
+      </span>
+    );
+  }
+
+  if (!deadlineDate) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+        <Clock className="w-3.5 h-3.5 text-slate-400" />
+        {notes || 'Se portal'}
       </span>
     );
   }
@@ -36,7 +45,7 @@ export function DeadlineBadge({ deadlineDate, isOngoing, notes, compact = false 
   } else if (days <= 14) {
     badgeClass = 'badge-urgent';
     dotColor = 'bg-rose-500';
-    label = `Akut: ${days} dage`;
+    label = `Frist om ${days} ${days === 1 ? 'dag' : 'dage'}`;
     Icon = AlertCircle;
   } else if (days <= 30) {
     badgeClass = 'badge-warning';
@@ -54,7 +63,7 @@ export function DeadlineBadge({ deadlineDate, isOngoing, notes, compact = false 
   return (
     <div className="inline-flex items-center gap-2">
       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold ${badgeClass}`}>
-        <span className={`w-1.5 h-1.5 rounded-full ${dotColor} ${days <= 14 && days >= 0 ? 'animate-ping' : ''}`} />
+        <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
         <Icon className="w-3.5 h-3.5" />
         {label}
       </span>

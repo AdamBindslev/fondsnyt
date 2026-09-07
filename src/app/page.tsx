@@ -12,7 +12,8 @@ import {
   ChevronRight,
   ShieldCheck,
   Database,
-  Cpu
+  Cpu,
+  CheckCircle2
 } from 'lucide-react';
 import { DeadlineBadge } from '@/components/DeadlineBadge';
 
@@ -124,7 +125,7 @@ export default async function DashboardPage() {
         <div className="nordic-card p-5 border-l-4 border-l-rose-500 bg-linear-to-br from-white to-rose-50/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-rose-700 uppercase tracking-wider">
-              Akutte Deadlines
+              Akutte Frister
             </span>
             <span className="p-1.5 rounded-md bg-rose-100 text-rose-700">
               <AlertCircle className="w-4 h-4" />
@@ -132,9 +133,9 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">{urgentCount}</span>
-            <span className="text-xs font-medium text-rose-600">frist under 14 dage</span>
+            <span className="text-xs font-medium text-rose-600">verificerede (&lt; 14 dage)</span>
           </div>
-          <p className="mt-2 text-xs text-slate-500">Kræver hurtig handling for indsendelse</p>
+          <p className="mt-2 text-xs text-slate-500">Kun bekræftede frister fra fondenes portaler</p>
         </div>
 
         {/* Næste frister (14-30 dage) */}
@@ -149,9 +150,9 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">{upcomingCount}</span>
-            <span className="text-xs font-medium text-amber-700">forberedelse i gang</span>
+            <span className="text-xs font-medium text-amber-700">verificerede frister</span>
           </div>
-          <p className="mt-2 text-xs text-slate-500">Ideelt vindue til udarbejdelse af bilag</p>
+          <p className="mt-2 text-xs text-slate-500">Kommende bekræftede ansøgningsrunder</p>
         </div>
 
         {/* Løbende puljer (uden fast frist) */}
@@ -217,96 +218,127 @@ export default async function DashboardPage() {
           </div>
 
           <div className="space-y-3">
-            {deadlineList.slice(0, 6).map(({ grant, deadline, daysRemaining }) => {
-              const infoUrl = grant.sourceUrl || grant.foundation?.websiteUrl || '#';
-              const hasSeparateApplication = Boolean(
-                grant.applicationUrl &&
-                grant.applicationUrl.trim() !== '' &&
-                grant.applicationUrl !== grant.sourceUrl
-              );
-              const foundationWebsite = grant.foundation?.websiteUrl;
+            {deadlineList.length > 0 ? (
+              deadlineList.slice(0, 6).map(({ grant, deadline, daysRemaining }) => {
+                const infoUrl = grant.sourceUrl || grant.foundation?.websiteUrl || '#';
+                const hasSeparateApplication = Boolean(
+                  grant.applicationUrl &&
+                  grant.applicationUrl.trim() !== '' &&
+                  grant.applicationUrl !== grant.sourceUrl
+                );
+                const foundationWebsite = grant.foundation?.websiteUrl;
 
-              return (
-                <div
-                  key={`${grant.id}-${deadline.id}`}
-                  className="nordic-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 transition-all group"
-                >
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      {foundationWebsite ? (
+                return (
+                  <div
+                    key={`${grant.id}-${deadline.id}`}
+                    className="nordic-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-300 transition-all group"
+                  >
+                    <div className="space-y-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        {foundationWebsite ? (
+                          <a
+                            href={foundationWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[11px] font-bold text-slate-500 hover:text-slate-800 uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
+                            title={`Besøg ${grant.foundation?.name}`}
+                          >
+                            <span>{grant.foundation?.name}</span>
+                            <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                          </a>
+                        ) : (
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            {grant.foundation?.name}
+                          </span>
+                        )}
+                        {grant.region === 'EU' && (
+                          <span className="px-1.5 py-0.2 rounded text-[10px] font-bold badge-eu">
+                            EU
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-900 transition-colors">
                         <a
-                          href={foundationWebsite}
+                          href={infoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[11px] font-bold text-slate-500 hover:text-slate-800 uppercase tracking-wider inline-flex items-center gap-1 transition-colors"
-                          title={`Besøg ${grant.foundation?.name}`}
+                          className="hover:underline inline-flex items-center gap-1.5"
+                          title="Læs officiel vejledning og betingelser for puljen"
                         >
-                          <span>{grant.foundation?.name}</span>
-                          <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                          <span>{grant.title}</span>
                         </a>
-                      ) : (
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                          {grant.foundation?.name}
-                        </span>
-                      )}
-                      {grant.region === 'EU' && (
-                        <span className="px-1.5 py-0.2 rounded text-[10px] font-bold badge-eu">
-                          EU
-                        </span>
-                      )}
+                      </h4>
+
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                        {deadline.notes && <span>{deadline.notes}</span>}
+                        {grant.maxAmount && (
+                          <span>• Op til {grant.maxAmount.toLocaleString('da-DK')} {grant.currency}</span>
+                        )}
+                      </div>
                     </div>
 
-                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-900 transition-colors">
+                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                      <DeadlineBadge
+                        deadlineDate={deadline.deadlineDate}
+                        isOngoing={deadline.isOngoing}
+                        notes={deadline.notes}
+                      />
                       <a
                         href={infoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:underline inline-flex items-center gap-1.5"
-                        title="Læs officiel vejledning og betingelser for puljen"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-medium transition-colors shadow-xs"
+                        title="Læs puljevejledning & krav"
                       >
-                        <span>{grant.title}</span>
+                        <span className="text-[11px]">Vejledning</span>
+                        <ExternalLink className="w-3 h-3 text-slate-300" />
                       </a>
-                    </h4>
-
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                      {deadline.notes && <span>{deadline.notes}</span>}
-                      {grant.maxAmount && (
-                        <span>• Op til {grant.maxAmount.toLocaleString('da-DK')} {grant.currency}</span>
+                      {hasSeparateApplication && (
+                        <a
+                          href={grant.applicationUrl!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-medium transition-colors border border-slate-200"
+                          title="Gå til digitalt ansøgningsskema / portal"
+                        >
+                          <span className="text-[11px]">Ansøg</span>
+                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                        </a>
                       )}
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                    <DeadlineBadge
-                      deadlineDate={deadline.deadlineDate}
-                      isOngoing={deadline.isOngoing}
-                    />
-                    <a
-                      href={infoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-medium transition-colors shadow-xs"
-                      title="Læs puljevejledning & krav"
-                    >
-                      <span className="text-[11px]">Vejledning</span>
-                      <ExternalLink className="w-3 h-3 text-slate-300" />
-                    </a>
-                    {hasSeparateApplication && (
-                      <a
-                        href={grant.applicationUrl!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-medium transition-colors border border-slate-200"
-                        title="Gå til digitalt ansøgningsskema / portal"
-                      >
-                        <span className="text-[11px]">Ansøg</span>
-                        <ExternalLink className="w-3 h-3 text-slate-400" />
-                      </a>
-                    )}
-                  </div>
+                );
+              })
+            ) : (
+              <div className="nordic-card p-8 text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6 text-emerald-600" />
                 </div>
-              );
-            })}
+                <div className="space-y-1">
+                  <h3 className="text-sm font-bold text-slate-900">Ingen verificerede tidsfrister lige nu</h3>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                    Der anvendes ingen fiktive frister. Puljerne har enten løbende ansøgningsbehandling eller henviser direkte til fondenes egne portaler. Nye tidsfrister registreres automatisk, når kildeovervågningen opdager dem.
+                  </p>
+                </div>
+                <div className="pt-2 flex items-center justify-center gap-3">
+                  <Link
+                    href="/puljer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                  >
+                    <span>Gennemse alle {enrichedGrants.length} puljer</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    href="/overvaagning"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200 transition-colors"
+                  >
+                    <Radio className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Se kildeovervågning</span>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
