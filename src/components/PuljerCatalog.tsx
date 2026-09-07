@@ -32,6 +32,7 @@ interface GrantItem {
 
 interface PuljerCatalogProps {
   initialGrants: GrantItem[];
+  initialCategory?: string;
 }
 
 const CATEGORIES = [
@@ -51,9 +52,11 @@ const CATEGORIES = [
   'EU / International'
 ];
 
-export function PuljerCatalog({ initialGrants }: PuljerCatalogProps) {
+export function PuljerCatalog({ initialGrants, initialCategory = 'Alle' }: PuljerCatalogProps) {
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Alle');
+  const [selectedCategory, setSelectedCategory] = useState(
+    CATEGORIES.includes(initialCategory) ? initialCategory : 'Alle'
+  );
   const [selectedRegion, setSelectedRegion] = useState('Alle');
   const [deadlineFilter, setDeadlineFilter] = useState<'all' | 'urgent' | 'upcoming' | 'ongoing'>('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'amount_desc' | 'title'>('deadline');

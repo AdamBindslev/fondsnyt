@@ -5,7 +5,14 @@ import { PuljerCatalog } from '@/components/PuljerCatalog';
 
 export const revalidate = 0;
 
-export default async function PuljerPage() {
+interface PuljerPageProps {
+  searchParams: Promise<{ kategori?: string }>;
+}
+
+export default async function PuljerPage({ searchParams }: PuljerPageProps) {
+  const params = await searchParams;
+  const initialCategory = params.kategori || 'Alle';
+
   const allGrants = db.select().from(grants).all();
   const allFoundations = db.select().from(foundations).all();
   const allDeadlines = db.select().from(grantDeadlines).all();
@@ -36,7 +43,7 @@ export default async function PuljerPage() {
         </p>
       </div>
 
-      <PuljerCatalog initialGrants={enriched} />
+      <PuljerCatalog initialGrants={enriched} initialCategory={initialCategory} />
     </div>
   );
 }
