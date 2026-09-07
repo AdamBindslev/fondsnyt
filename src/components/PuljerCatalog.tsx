@@ -44,6 +44,9 @@ const CATEGORIES = [
   'Børn & Unge',
   'Fællesskab',
   'Byggeri/Byrum',
+  'Natur & Miljø',
+  'Idræt & Friluftsliv',
+  'Erhverv & Innovation',
   'Forskning',
   'EU / International'
 ];

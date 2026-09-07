@@ -218,7 +218,12 @@ export default async function DashboardPage() {
 
           <div className="space-y-3">
             {deadlineList.slice(0, 6).map(({ grant, deadline, daysRemaining }) => {
-              const targetUrl = grant.applicationUrl || grant.sourceUrl || grant.foundation?.websiteUrl || '#';
+              const infoUrl = grant.sourceUrl || grant.foundation?.websiteUrl || '#';
+              const hasSeparateApplication = Boolean(
+                grant.applicationUrl &&
+                grant.applicationUrl.trim() !== '' &&
+                grant.applicationUrl !== grant.sourceUrl
+              );
               const foundationWebsite = grant.foundation?.websiteUrl;
 
               return (
@@ -253,11 +258,11 @@ export default async function DashboardPage() {
 
                     <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-900 transition-colors">
                       <a
-                        href={targetUrl}
+                        href={infoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:underline inline-flex items-center gap-1.5"
-                        title="Gå direkte til puljesiden"
+                        title="Læs officiel vejledning og betingelser for puljen"
                       >
                         <span>{grant.title}</span>
                       </a>
@@ -271,21 +276,33 @@ export default async function DashboardPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                     <DeadlineBadge
                       deadlineDate={deadline.deadlineDate}
                       isOngoing={deadline.isOngoing}
                     />
                     <a
-                      href={targetUrl}
+                      href={infoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-medium transition-colors"
-                      title="Åbn officiel kilde i ny fane"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-medium transition-colors shadow-xs"
+                      title="Læs puljevejledning & krav"
                     >
-                      <span className="hidden sm:inline text-[11px]">Kilde</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span className="text-[11px]">Vejledning</span>
+                      <ExternalLink className="w-3 h-3 text-slate-300" />
                     </a>
+                    {hasSeparateApplication && (
+                      <a
+                        href={grant.applicationUrl!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-xs font-medium transition-colors border border-slate-200"
+                        title="Gå til digitalt ansøgningsskema / portal"
+                      >
+                        <span className="text-[11px]">Ansøg</span>
+                        <ExternalLink className="w-3 h-3 text-slate-400" />
+                      </a>
+                    )}
                   </div>
                 </div>
               );
