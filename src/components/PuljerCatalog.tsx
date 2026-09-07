@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, SlidersHorizontal, RotateCcw, Coins, Calendar, Sparkles } from 'lucide-react';
+import { Search, Filter, SlidersHorizontal, RotateCcw, Coins, Calendar } from 'lucide-react';
 import { GrantCard } from './GrantCard';
 
 interface GrantItem {

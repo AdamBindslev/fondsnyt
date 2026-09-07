@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Search, 
-  Sparkles, 
   KanbanSquare, 
   Radio, 
   LogOut,
@@ -40,7 +39,6 @@ export function Navbar() {
   const navItems = [
     { href: '/', label: 'Oversigt', icon: LayoutDashboard },
     { href: '/puljer', label: 'Fonde & Puljer', icon: Search },
-    { href: '/matcher', label: 'Match Projekt (AI)', icon: Sparkles, highlight: true },
     { href: '/pipeline', label: 'Min Pipeline', icon: KanbanSquare },
     { href: '/overvaagning', label: 'Kildeovervågning', icon: Radio },
   ];
@@ -88,13 +86,10 @@ export function Navbar() {
                     isActive
                       ? 'bg-slate-100 text-slate-900 shadow-2xs font-semibold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  } ${item.highlight && !isActive ? 'text-indigo-600 font-semibold' : ''}`}
+                  }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-slate-900' : item.highlight ? 'text-indigo-500' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-slate-900' : 'text-slate-400'}`} />
                   {item.label}
-                  {item.highlight && (
-                    <span className="ml-0.5 w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                  )}
                 </Link>
               );
             })}
@@ -103,11 +98,11 @@ export function Navbar() {
           {/* System status pill & Logout */}
           <div className="flex items-center gap-3">
             <Link
-              href="/matcher"
+              href="/puljer"
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold shadow-xs transition-all"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Match Ansøgning</span>
+              <Search className="w-3.5 h-3.5 text-slate-300" />
+              <span>Find Puljer</span>
             </Link>
 
             <button

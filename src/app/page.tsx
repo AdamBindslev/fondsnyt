@@ -7,7 +7,6 @@ import {
   Calendar, 
   Clock, 
   Coins, 
-  Sparkles, 
   ArrowRight, 
   CheckCircle2, 
   Radio, 
@@ -109,11 +108,11 @@ export default async function DashboardPage() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/matcher"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-xs transition-all"
+            href="/pipeline"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-xs transition-all"
           >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>Match mit Projekt</span>
+            <KanbanSquare className="w-4 h-4 text-slate-300" />
+            <span>Min Pipeline</span>
           </Link>
           <Link
             href="/puljer"
