@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Lock, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,14 +25,14 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        router.push('/');
-        router.refresh();
+        // Use full location replace to cleanly transition sessions without RSC race condition
+        window.location.href = '/';
       } else {
         setError(data.error || 'Forkert adgangskode');
+        setLoading(false);
       }
     } catch (err) {
       setError('Der opstod en netværksfejl. Prøv igen.');
-    } finally {
       setLoading(false);
     }
   };

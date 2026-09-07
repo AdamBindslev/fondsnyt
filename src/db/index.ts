@@ -28,18 +28,27 @@ if (process.env.VERCEL) {
 
 const sqlite = new Database(dbPath);
 
-// Enable WAL mode for high concurrency
+// Prevent SQLITE_BUSY errors with concurrency timeout and journal optimizations
 try {
+  sqlite.pragma('busy_timeout = 5000');
   sqlite.pragma('journal_mode = WAL');
+  sqlite.pragma('synchronous = NORMAL');
 } catch (e) {
   // Ignored if unsupported
 }
 
 export const db = drizzle(sqlite, { schema });
 
-// Auto-initialize tables if not already present
+// Auto-initialize tables only if not already present
 export function initDb() {
-  sqlite.exec(`
+  try {
+    // Fast check: if foundations table already exists, skip heavy schema DDL
+    const tableCheck = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='foundations'").get();
+    if (tableCheck) {
+      return;
+    }
+
+    sqlite.exec(`
     CREATE TABLE IF NOT EXISTS foundations (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -107,6 +116,9 @@ export function initDb() {
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  } catch (e) {
+    console.warn('Database initialization warning:', e);
+  }
 }
 
 // Call init on import
