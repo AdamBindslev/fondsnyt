@@ -1,10 +1,45 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { db } from '@/db';
 import { monitoredSources, foundations } from '@/db/schema';
 import { checkSourceForChanges } from '@/lib/scraper/diff-detector';
 import { eq } from 'drizzle-orm';
 
-export async function GET() {
+function isAuthorized(request: NextRequest): boolean {
+  // 1. Check user login session cookie
+  const authCookie = request.cookies.get('fondsnyt_auth');
+  if (authCookie?.value) return true;
+
+  // 2. Check CRON secret header
+  const authHeader = request.headers.get('authorization');
+  const customCronHeader = request.headers.get('x-cron-secret');
+  const cronSecret = process.env.CRON_SECRET;
+
+  if (cronSecret) {
+    if (authHeader && (authHeader === `Bearer ${cronSecret}` || authHeader === cronSecret)) {
+      return true;
+    }
+    if (customCronHeader && customCronHeader === cronSecret) {
+      return true;
+    }
+  }
+
+  // 3. Fallback for local development when CRON_SECRET is not explicitly set
+  if (process.env.NODE_ENV === 'development' && !cronSecret) {
+    return true;
+  }
+
+  return false;
+}
+
+export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json(
+      { error: 'Uautoriseret adgang. Login eller gyldig CRON_SECRET påkrævet.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const sources = db.select().from(monitoredSources).all();
     const allFoundations = db.select().from(foundations).all();
@@ -22,7 +57,14 @@ export async function GET() {
   }
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json(
+      { error: 'Uautoriseret adgang. Login eller gyldig CRON_SECRET påkrævet.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const sources = db.select().from(monitoredSources).all();
     const results = [];

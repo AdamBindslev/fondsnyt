@@ -91,3 +91,20 @@ docker build -t fondsnyt-dashboard .
 docker run -p 3000:3000 -v $(pwd)/data:/app/data fondsnyt-dashboard
 ```
 Eller benyt `docker-compose up -d`. Databasen gemmes sikkert i det mountede `data/` volumen.
+
+---
+
+## ⏰ Automatisk Løbende Opdatering (Cron)
+
+Dashboardet understøtter automatisk kørsel af kildeovervågning via to metoder:
+
+1. **Vercel Cron (indbygget via [`vercel.json`](vercel.json)):**
+   * Kører automatisk hver nat kl. 03:00 UTC mod `/api/crawl`.
+   * Kræver blot at `CRON_SECRET` er defineret i dine Vercel Environment Variables. Vercel medsender automatisk `Authorization: Bearer <CRON_SECRET>`.
+
+2. **GitHub Actions (indbygget via [`.github/workflows/crawl.yml`](.github/workflows/crawl.yml)):**
+   * Kører på en skemalagt timer (natligt kl. 03:00 UTC) eller manuelt on-demand under fanen **Actions** i GitHub.
+   * Tilføj følgende GitHub Repository Secrets:
+     * `FONDSNYT_APP_URL`: Fx `https://dit-dashboard.vercel.app`
+     * `CRON_SECRET`: Samme hemmelige token som i appens miljøvariabler.
+

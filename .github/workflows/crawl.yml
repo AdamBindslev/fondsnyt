@@ -1,0 +1,41 @@
+name: Fondsnyt Scheduled Crawl
+
+on:
+  schedule:
+    # Runs every night at 03:00 UTC (05:00 CEST)
+    - cron: '0 3 * * *'
+  # Allows manual run from the GitHub Actions tab anytime
+  workflow_dispatch:
+
+jobs:
+  crawl:
+    name: Trigger Fondsnyt Source Crawl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Crawl Request
+        env:
+          APP_URL: ${{ secrets.FONDSNYT_APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "::error::FONDSNYT_APP_URL secret is not configured in GitHub repository secrets."
+            exit 1
+          fi
+
+          echo "Triggering Fondsnyt source crawl on ${APP_URL}..."
+          response=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "${APP_URL}/api/crawl" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -H "Content-Type: application/json")
+          
+          body=$(echo "$response" | sed '$d')
+          status=$(echo "$response" | tail -n 1 | cut -d: -f2)
+
+          echo "Response status: $status"
+          echo "Response body: $body"
+
+          if [ "$status" -ne 200 ]; then
+            echo "::error::Crawl request failed with HTTP status $status"
+            exit 1
+          fi
+
+          echo "Crawl completed successfully."
